@@ -1,28 +1,19 @@
-import json
+from gendiff.differ.loader import get_data
+from gendiff.differ.differ import find_diff
 
 CONST_TEMPLATE = '  {} {} {}'
 
 
 def generate_diff(file_path1, file_path2):
-    with open(file_path1) as file1, open(file_path2) as file2:
-        json1 = json.load(file1)
-        json2 = json.load(file2)
+    json1 = get_data(file_path1)
+    json2 = get_data(file_path2)
 
-        result = ['{']
-        for key in json1.keys():
-            if key not in json2:
-                result.append(CONST_TEMPLATE.format('-', key, json1[key]))
-            else:
-                if json1[key] == json2[key]:
-                    result.append(CONST_TEMPLATE.format(' ', key, json1[key]))
-                else:
-                    result.append(CONST_TEMPLATE.format("-", key, json1[key]))
-                    result.append(CONST_TEMPLATE.format("+", key, json2[key]))
+    diff = find_diff(json1, json2)
 
-        for key in json2.keys():
-            if key not in json1:
-                result.append(CONST_TEMPLATE.format("+", key, json2[key]))
+    diff_lines = ['{']
+    for diff_line in diff:
+        sign, key, value = diff_line
+        diff_lines.append(CONST_TEMPLATE.format(sign, key, value))
+    diff_lines.append('}')
 
-        result.append('}')
-
-    return "\n".join(result)
+    return "\n".join(diff_lines)
