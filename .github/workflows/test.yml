@@ -4,8 +4,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: install
       - uses: actions/checkout@v2
+      - name: install
         run:  |
           pip install poetry
           make install

@@ -1,4 +1,4 @@
-name: lint
+name: lint & test
 on: push
 jobs:
   build:
@@ -11,3 +11,5 @@ jobs:
           make install
       - name: lint
         run: make lint
+      - name: test
+        run: make test

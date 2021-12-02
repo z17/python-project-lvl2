@@ -5,6 +5,4 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/26a76348759139a95127/test_coverage)](https://codeclimate.com/github/z17/python-project-lvl2/test_coverage)
 
-[![lint](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml/badge.svg)](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml)
-
-[![test](https://github.com/z17/python-project-lvl2/actions/workflows/test.yml/badge.svg)](https://github.com/z17/python-project-lvl2/actions/workflows/test.yml)
+[![lint & test](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml/badge.svg)](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml)
