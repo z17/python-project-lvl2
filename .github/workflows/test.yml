@@ -4,10 +4,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: install
+      - uses: actions/checkout@v2
         run:  |
           pip install poetry
           make install
-      - name: test
+      - name: test & publish
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TEST_REPORTER_ID }}
         run: make test
+        with:
+          coverageCommand: make test-coverage

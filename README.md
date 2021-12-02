@@ -7,4 +7,4 @@
 
 [![lint](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml/badge.svg)](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml)
 
-[![tests](https://github.com/z17/python-project-lvl2/actions/workflows/lint.yml/badge.svg)](https://github.com/z17/python-project-lvl2/actions/workflows/test.yml)
+[![tests](https://github.com/z17/python-project-lvl2/actions/workflows/test.yml/badge.svg)](https://github.com/z17/python-project-lvl2/actions/workflows/test.yml)
