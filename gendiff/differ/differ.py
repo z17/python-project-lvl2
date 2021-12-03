@@ -2,14 +2,15 @@ import json
 import yaml
 
 FORMAT_JSON = 'json'
-FORMAT_YAML = 'yml'
+FORMAT_YML = 'yml'
+FORMAT_YAML = 'yaml'
 
 
 def find_diff(text1, text2, file_format):
     if file_format == FORMAT_JSON:
         return find_diff_json(text1, text2)
 
-    if file_format == FORMAT_YAML:
+    if file_format == FORMAT_YAML or file_format == FORMAT_YML:
         return find_diff_yaml(text1, text2)
 
     raise Exception("Unknown file extension")
