@@ -1,7 +1,6 @@
+from gendiff.formatter.stylish import stylish
 from gendiff.differ.loader import get_file_data
 from gendiff.differ.differ import find_diff
-
-CONST_TEMPLATE = '  {} {} {}'
 
 
 def generate_diff(file_path1, file_path2):
@@ -13,10 +12,4 @@ def generate_diff(file_path1, file_path2):
 
     diff = find_diff(text1, text2, extension1)
 
-    diff_lines = ['{']
-    for diff_line in diff:
-        sign, key, value = diff_line
-        diff_lines.append(CONST_TEMPLATE.format(sign, key, value))
-    diff_lines.append('}')
-
-    return "\n".join(diff_lines)
+    return stylish(diff)

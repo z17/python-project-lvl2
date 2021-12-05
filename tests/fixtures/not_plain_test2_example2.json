@@ -1,0 +1,9 @@
+{
+  "common": {
+    "setting2": 200,
+    "setting3": true
+  },
+  "added": {
+    "va" : 5
+  }
+}
