@@ -1,11 +1,11 @@
 from typing import List
 
 from gendiff.differ.differ import STATUS_CHANGED, STATUS_ADDED, \
-    STATUS_NOT_CHANGED, STATUS_REMOVED
+    STATUS_NOT_CHANGED, STATUS_REMOVED, STATUS_CHILDREN
 
-TEMPLATE_VALUE = '{}{} {}: {}'
-TEMPLATE_DICT_OPEN = '{}{} {}: {{'
-TEMPLATE_DICT_CLOSE = '{}}}'
+TEMPLATE_VALUE = '{spaces}{status} {key}: {value}'
+TEMPLATE_DICT_OPEN = '{spaces}{status} {key}: {{'
+TEMPLATE_DICT_CLOSE = '{spaces}}}'
 
 STATUS_MAP = {
     STATUS_ADDED: '+',
@@ -15,10 +15,65 @@ STATUS_MAP = {
 
 
 def stylish(diff: List):
-    return stylish_recursive(diff)
+    lines = ['{']
+    lines.extend(stylish_recursive(diff))
+    lines.append('}')
+    return "\n".join(lines)
 
 
-def stylish_recursive(diff: List, level=1, key=None, key_status=None):
+def stylish_format_value(key, value, status, level):
+    spaces = get_spaces(level)
+    if type(value) == dict:
+        lines = [
+            TEMPLATE_DICT_OPEN.format(spaces=spaces, status=status, key=key)]
+        for key in value:
+            lines.append(stylish_format_value(key, value[key], ' ', level + 1))
+
+        lines.append(TEMPLATE_DICT_CLOSE.format(spaces=spaces))
+        return "\n".join(lines)
+    else:
+        return TEMPLATE_VALUE.format(spaces=spaces, status=status,
+                                     key=key,
+                                     value=value)
+
+
+def get_spaces(level):
+    return ' ' * 2 * level
+
+
+def stylish_recursive(diff: List, level=1):
+    diff_lines = []
+    for diff_line in diff:
+        status = diff_line.status
+        key = diff_line.key
+        if status == STATUS_ADDED:
+            diff_lines.append(
+                stylish_format_value(key, diff_line.value, '+', level)
+            )
+        elif status == STATUS_REMOVED:
+            diff_lines.append(
+                stylish_format_value(key, diff_line.old_value, '-', level)
+            )
+        elif status == STATUS_CHANGED:
+            diff_lines.append(
+                stylish_format_value(key, diff_line.old_value, '-', level)
+            )
+            diff_lines.append(
+                stylish_format_value(key, diff_line.value, '+', level)
+            )
+        elif status == STATUS_NOT_CHANGED:
+            diff_lines.append(
+                stylish_format_value(key, diff_line.value, ' ', level)
+            )
+        elif status == STATUS_CHILDREN:
+            diff_lines.extend(
+                stylish_recursive(diff_line.children, level+1)
+            )
+
+    return diff_lines
+
+
+def stylish_recursive2(diff: List, level=1, key=None, key_status=None):
     spaces = ' ' * 2 * level
     spaces_brackets = ' ' * (2 * (level - 1))
     diff_lines = []
