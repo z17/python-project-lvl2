@@ -41,9 +41,9 @@ def find_diff_dict(dict1, dict2):
 
 
 def find_diff_dict_recursive(data1, data2):
-    # todo: unique
-    keys = list(data1.keys())
-    keys.extend(list(data2.keys()))
+    all_keys = list(data1.keys())
+    all_keys.extend(list(data2.keys()))
+    keys = set(all_keys)
 
     diff = []
     for key in keys:
