@@ -79,7 +79,8 @@ def stylish_recursive(diff: List, level=1):
             )
         elif status == STATUS_CHILDREN:
             spaces = get_spaces(level)
-            diff_lines.append(TEMPLATE_DICT_OPEN.format(spaces=spaces, sign=' ', key=key))
+            diff_lines.append(
+                TEMPLATE_DICT_OPEN.format(spaces=spaces, sign=' ', key=key))
             diff_lines.extend(
                 stylish_recursive(diff_line.children, level + 1)
             )
