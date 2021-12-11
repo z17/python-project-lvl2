@@ -3,8 +3,6 @@ from typing import List
 from gendiff.differ.differ import STATUS_CHANGED, STATUS_ADDED, \
     STATUS_NOT_CHANGED, STATUS_REMOVED, STATUS_CHILDREN
 
-FORMAT_STYLISH = 'stylish'
-
 TEMPLATE_VALUE = '{spaces}{status} {key}:{value}'
 TEMPLATE_DICT_OPEN = '{spaces}{sign} {key}: {{'
 TEMPLATE_DICT_CLOSE = '  {spaces}}}'
@@ -16,20 +14,20 @@ STATUS_MAP = {
 }
 
 
-def stylish(diff: List):
+def render_stylish(diff: List):
     lines = ['{']
     lines.extend(stylish_recursive(diff))
     lines.append('}')
     return "\n".join(lines)
 
 
-def stylish_format_value(key, value, sign, level):
+def format_value(key, value, sign, level):
     spaces = get_spaces(level)
     if type(value) == dict:
         lines = [
             TEMPLATE_DICT_OPEN.format(spaces=spaces, sign=sign, key=key)]
         for key in value:
-            lines.append(stylish_format_value(key, value[key], ' ', level + 1))
+            lines.append(format_value(key, value[key], ' ', level + 1))
 
         lines.append(TEMPLATE_DICT_CLOSE.format(spaces=spaces))
         return "\n".join(lines)
@@ -60,22 +58,22 @@ def stylish_recursive(diff: List, level=1):
         key = diff_line.key
         if status == STATUS_ADDED:
             diff_lines.append(
-                stylish_format_value(key, diff_line.value, '+', level)
+                format_value(key, diff_line.value, '+', level)
             )
         elif status == STATUS_REMOVED:
             diff_lines.append(
-                stylish_format_value(key, diff_line.old_value, '-', level)
+                format_value(key, diff_line.old_value, '-', level)
             )
         elif status == STATUS_CHANGED:
             diff_lines.append(
-                stylish_format_value(key, diff_line.old_value, '-', level)
+                format_value(key, diff_line.old_value, '-', level)
             )
             diff_lines.append(
-                stylish_format_value(key, diff_line.value, '+', level)
+                format_value(key, diff_line.value, '+', level)
             )
         elif status == STATUS_NOT_CHANGED:
             diff_lines.append(
-                stylish_format_value(key, diff_line.value, ' ', level)
+                format_value(key, diff_line.value, ' ', level)
             )
         elif status == STATUS_CHILDREN:
             spaces = get_spaces(level)

@@ -1,0 +1,6 @@
+Property 'common.complex' was added with value: [complex value]
+Property 'common.key' was added with value: true
+Property 'common.removed_complex' was updated. From [complex value] to 'skip'
+Property 'key1' was added with value: false
+Property 'key2' was removed
+Property 'key3' was updated. From 5 to null

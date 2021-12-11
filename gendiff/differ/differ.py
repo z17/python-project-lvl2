@@ -1,4 +1,6 @@
 import json
+from typing import List
+
 import yaml
 
 from gendiff.differ.Difference import Difference
@@ -14,7 +16,7 @@ STATUS_ADDED = 'ADDED'
 STATUS_CHILDREN = 'CHILDREN'
 
 
-def find_diff(text1, text2, file_format):
+def find_diff(text1: str, text2: str, file_format: str) -> List[Difference]:
     if file_format == FORMAT_JSON:
         return find_diff_json(text1, text2)
 
@@ -24,23 +26,23 @@ def find_diff(text1, text2, file_format):
     raise Exception("Unknown file extension")
 
 
-def find_diff_json(text1, text2):
+def find_diff_json(text1, text2) -> List[Difference]:
     json1 = json.loads(text1)
     json2 = json.loads(text2)
     return find_diff_dict(json1, json2)
 
 
-def find_diff_yaml(text1, text2):
+def find_diff_yaml(text1, text2) -> List[Difference]:
     data1 = yaml.load(text1, Loader=yaml.CLoader)
     data2 = yaml.load(text2, Loader=yaml.CLoader)
     return find_diff_dict(data1, data2)
 
 
-def find_diff_dict(dict1, dict2):
+def find_diff_dict(dict1, dict2) -> List[Difference]:
     return find_diff_dict_recursive(dict1, dict2)
 
 
-def find_diff_dict_recursive(data1, data2):
+def find_diff_dict_recursive(data1, data2) -> List[Difference]:
     all_keys = list(data1.keys())
     all_keys.extend(list(data2.keys()))
     keys = set(all_keys)
