@@ -3,7 +3,7 @@ from typing import List
 from gendiff.differ.differ import STATUS_CHANGED, STATUS_ADDED, \
     STATUS_NOT_CHANGED, STATUS_REMOVED, STATUS_CHILDREN
 
-TEMPLATE_VALUE = '{spaces}{status} {key}:{value}'
+TEMPLATE_VALUE = '{spaces}{status} {key}: {value}'
 TEMPLATE_DICT_OPEN = '{spaces}{sign} {key}: {{'
 TEMPLATE_DICT_CLOSE = '  {spaces}}}'
 
@@ -39,8 +39,6 @@ def format_value(key, value, sign, level):
         else:
             val_string = str(value)
 
-        if val_string:
-            val_string = ' ' + val_string
         return TEMPLATE_VALUE.format(spaces=spaces, status=sign,
                                      key=key,
                                      value=val_string)
