@@ -14,7 +14,7 @@ STATUS_MAP = {
 }
 
 
-def render_stylish(diff: List):
+def render_stylish(diff: List[dict]):
     lines = ['{']
     lines.extend(stylish_recursive(diff))
     lines.append('}')
@@ -48,37 +48,37 @@ def get_spaces(level):
     return ' ' * (4 * level - 2)
 
 
-def stylish_recursive(diff: List, level=1):
+def stylish_recursive(diff: List[dict], level=1):
     diff_lines = []
-    diff.sort(key=lambda a: a.key)
+    diff.sort(key=lambda a: a['key'])
     for diff_line in diff:
-        status = diff_line.status
-        key = diff_line.key
+        status = diff_line['status']
+        key = diff_line['key']
         if status == STATUS_ADDED:
             diff_lines.append(
-                format_value(key, diff_line.value, '+', level)
+                format_value(key, diff_line['value'], '+', level)
             )
         elif status == STATUS_REMOVED:
             diff_lines.append(
-                format_value(key, diff_line.old_value, '-', level)
+                format_value(key, diff_line['old_value'], '-', level)
             )
         elif status == STATUS_CHANGED:
             diff_lines.append(
-                format_value(key, diff_line.old_value, '-', level)
+                format_value(key, diff_line['old_value'], '-', level)
             )
             diff_lines.append(
-                format_value(key, diff_line.value, '+', level)
+                format_value(key, diff_line['value'], '+', level)
             )
         elif status == STATUS_NOT_CHANGED:
             diff_lines.append(
-                format_value(key, diff_line.value, ' ', level)
+                format_value(key, diff_line['value'], ' ', level)
             )
         elif status == STATUS_CHILDREN:
             spaces = get_spaces(level)
             diff_lines.append(
                 TEMPLATE_DICT_OPEN.format(spaces=spaces, sign=' ', key=key))
             diff_lines.extend(
-                stylish_recursive(diff_line.children, level + 1)
+                stylish_recursive(diff_line['children'], level + 1)
             )
             diff_lines.append(TEMPLATE_DICT_CLOSE.format(spaces=spaces))
 

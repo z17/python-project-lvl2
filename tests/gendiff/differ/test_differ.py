@@ -9,14 +9,14 @@ def test_json_check_plain():
 
     diff = find_diff(file1, file2, FORMAT_JSON)
 
-    has_timeout = list(filter(lambda x: x.key == 'timeout', diff))
-    assert has_timeout[0].status == STATUS_CHANGED
-    assert has_timeout[0].value == 20
-    assert has_timeout[0].old_value == 50
+    has_timeout = list(filter(lambda x: x['key'] == 'timeout', diff))
+    assert has_timeout[0]['status'] == STATUS_CHANGED
+    assert has_timeout[0]['value'] == 20
+    assert has_timeout[0]['old_value'] == 50
 
-    has_timeout = list(filter(lambda x: x.key == 'follow', diff))
-    assert has_timeout[0].status == STATUS_REMOVED
-    assert not has_timeout[0].value
+    has_timeout = list(filter(lambda x: x['key'] == 'follow', diff))
+    assert has_timeout[0]['status'] == STATUS_REMOVED
+    assert not has_timeout[0]['value']
 
 
 def test_yaml_check_plain():
@@ -25,14 +25,14 @@ def test_yaml_check_plain():
 
     diff = find_diff(file1, file2, FORMAT_YAML)
 
-    has_timeout = list(filter(lambda x: x.key == 'timeout', diff))
-    assert has_timeout[0].status == STATUS_CHANGED
-    assert has_timeout[0].value == 20
-    assert has_timeout[0].old_value == 50
+    has_timeout = list(filter(lambda x: x['key'] == 'timeout', diff))
+    assert has_timeout[0]['status'] == STATUS_CHANGED
+    assert has_timeout[0]['value'] == 20
+    assert has_timeout[0]['old_value'] == 50
 
-    has_timeout = list(filter(lambda x: x.key == 'follow', diff))
-    assert has_timeout[0].status == STATUS_REMOVED
-    assert not has_timeout[0].value
+    has_timeout = list(filter(lambda x: x['key'] == 'follow', diff))
+    assert has_timeout[0]['status'] == STATUS_REMOVED
+    assert not has_timeout[0]['value']
 
 
 def test_json_check_not_plain():
@@ -41,12 +41,12 @@ def test_json_check_not_plain():
 
     diff = find_diff(file1, file2, FORMAT_JSON)
 
-    common = list(filter(lambda x: x.key == 'common', diff))[0]
-    setting2 = list(filter(lambda x: x.key == 'setting2', common.children))[0]
-    setting3 = list(filter(lambda x: x.key == 'setting3', common.children))[0]
+    common = list(filter(lambda x: x['key'] == 'common', diff))[0]
+    setting2 = list(filter(lambda x: x['key'] == 'setting2', common['children']))[0]
+    setting3 = list(filter(lambda x: x['key'] == 'setting3', common['children']))[0]
 
-    assert setting2.status == STATUS_REMOVED
-    assert setting2.old_value == 200
+    assert setting2['status'] == STATUS_REMOVED
+    assert setting2['old_value'] == 200
 
-    assert setting3.status == STATUS_CHANGED
-    assert setting3.value is None
+    assert setting3['status'] == STATUS_CHANGED
+    assert setting3['value'] is None

@@ -1,7 +1,6 @@
 from typing import List
 
 from gendiff.formatter.json import render_json
-from gendiff.differ.Difference import Difference
 from gendiff.formatter.plain import render_plain
 from gendiff.formatter.stylish import render_stylish
 
@@ -10,7 +9,7 @@ STYLE_PLAIN = 'plain'
 STYLE_JSON = 'json'
 
 
-def render(style: str, diff: List[Difference]) -> str:
+def render(style: str, diff: List[dict]) -> str:
     if style == STYLE_STYLISH:
         return render_stylish(diff)
 

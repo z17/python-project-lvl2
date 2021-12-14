@@ -1,20 +1,20 @@
 import json
 
 from gendiff.formatter.json import render_json
-from gendiff.differ.Difference import Difference
-from gendiff.differ.differ import STATUS_ADDED, STATUS_REMOVED, STATUS_CHANGED, STATUS_CHILDREN, STATUS_NOT_CHANGED
+from gendiff.differ.differ import STATUS_ADDED, STATUS_REMOVED, STATUS_CHANGED, STATUS_CHILDREN, STATUS_NOT_CHANGED, \
+    difference_data
 
 
 def test_render_plain():
     diff = [
-        Difference('key1', STATUS_ADDED, False),
-        Difference('key2', STATUS_REMOVED, old_value=False),
-        Difference('key3', STATUS_CHANGED, None, 5),
-        Difference('key4', STATUS_CHANGED, 'str', {5: 'a'}),
-        Difference('dict_key', STATUS_CHILDREN, children=[
-            Difference('key', STATUS_ADDED, True),
+        difference_data('key1', STATUS_ADDED, False),
+        difference_data('key2', STATUS_REMOVED, old_value=False),
+        difference_data('key3', STATUS_CHANGED, None, 5),
+        difference_data('key4', STATUS_CHANGED, value='str', old_value={5: 'a'}),
+        difference_data('dict_key', STATUS_CHILDREN, children=[
+            difference_data('key', STATUS_ADDED, True),
         ]),
-        Difference('key4', STATUS_NOT_CHANGED, 15),
+        difference_data('key4', STATUS_NOT_CHANGED, 15),
     ]
 
     output = render_json(diff)
