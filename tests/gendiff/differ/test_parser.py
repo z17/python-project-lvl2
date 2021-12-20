@@ -16,7 +16,7 @@ def test_parse_yaml():
 name: "value"
     '''
     text2 = '''
-name: 
+name:
     name1: 5
     '''
     data1, data2 = parse(text1, text2, FORMAT_YAML)
