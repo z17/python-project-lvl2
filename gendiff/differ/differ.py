@@ -8,11 +8,11 @@ FORMAT_JSON = 'json'
 FORMAT_YML = 'yml'
 FORMAT_YAML = 'yaml'
 
-STATUS_CHANGED = 'CHANGED'
-STATUS_NOT_CHANGED = 'NOT_CHANGED'
-STATUS_REMOVED = 'REMOVED'
-STATUS_ADDED = 'ADDED'
-STATUS_CHILDREN = 'CHILDREN'
+TYPE_CHANGED = 'CHANGED'
+TYPE_NOT_CHANGED = 'NOT_CHANGED'
+TYPE_REMOVED = 'REMOVED'
+TYPE_ADDED = 'ADDED'
+TYPE_CHILDREN = 'CHILDREN'
 
 
 def find_diff(text1: str, text2: str, file_format: str) -> List[dict]:
@@ -49,17 +49,17 @@ def find_diff_dict_recursive(data1, data2) -> List[dict]:
     diff = []
     for key in keys:
         if key in data1 and key not in data2:
-            diff.append(difference_data(key, STATUS_REMOVED, old_value=data1[key]))
+            diff.append(difference_data(key, TYPE_REMOVED, old_value=data1[key]))
         elif key not in data1 and key in data2:
-            diff.append(difference_data(key, STATUS_ADDED, value=data2[key]))
+            diff.append(difference_data(key, TYPE_ADDED, value=data2[key]))
         elif type(data1[key]) == dict and type(data2[key]) == dict:
             child_diff = find_diff_dict_recursive(data1[key], data2[key])
-            diff.append(difference_data(key, STATUS_CHILDREN, children=child_diff))
+            diff.append(difference_data(key, TYPE_CHILDREN, children=child_diff))
         elif data1[key] != data2[key]:
-            diff.append(difference_data(key, STATUS_CHANGED, value=data2[key],
+            diff.append(difference_data(key, TYPE_CHANGED, value=data2[key],
                                         old_value=data1[key]))
         else:
-            diff.append(difference_data(key, STATUS_NOT_CHANGED, value=data1[key]))
+            diff.append(difference_data(key, TYPE_NOT_CHANGED, value=data1[key]))
 
     return diff
 

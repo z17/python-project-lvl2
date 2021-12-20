@@ -1,16 +1,16 @@
 from typing import List
 
-from gendiff.differ.differ import STATUS_CHANGED, STATUS_ADDED, \
-    STATUS_NOT_CHANGED, STATUS_REMOVED, STATUS_CHILDREN
+from gendiff.differ.differ import TYPE_CHANGED, TYPE_ADDED, \
+    TYPE_NOT_CHANGED, TYPE_REMOVED, TYPE_CHILDREN
 
 TEMPLATE_VALUE = '{spaces}{status} {key}: {value}'
 TEMPLATE_DICT_OPEN = '{spaces}{sign} {key}: {{'
 TEMPLATE_DICT_CLOSE = '  {spaces}}}'
 
 STATUS_MAP = {
-    STATUS_ADDED: '+',
-    STATUS_REMOVED: '-',
-    STATUS_NOT_CHANGED: ' ',
+    TYPE_ADDED: '+',
+    TYPE_REMOVED: '-',
+    TYPE_NOT_CHANGED: ' ',
 }
 
 
@@ -54,26 +54,26 @@ def stylish_recursive(diff: List[dict], level=1):
     for diff_line in diff:
         status = diff_line['status']
         key = diff_line['key']
-        if status == STATUS_ADDED:
+        if status == TYPE_ADDED:
             diff_lines.append(
                 format_value(key, diff_line['value'], '+', level)
             )
-        elif status == STATUS_REMOVED:
+        elif status == TYPE_REMOVED:
             diff_lines.append(
                 format_value(key, diff_line['old_value'], '-', level)
             )
-        elif status == STATUS_CHANGED:
+        elif status == TYPE_CHANGED:
             diff_lines.append(
                 format_value(key, diff_line['old_value'], '-', level)
             )
             diff_lines.append(
                 format_value(key, diff_line['value'], '+', level)
             )
-        elif status == STATUS_NOT_CHANGED:
+        elif status == TYPE_NOT_CHANGED:
             diff_lines.append(
                 format_value(key, diff_line['value'], ' ', level)
             )
-        elif status == STATUS_CHILDREN:
+        elif status == TYPE_CHILDREN:
             spaces = get_spaces(level)
             diff_lines.append(
                 TEMPLATE_DICT_OPEN.format(spaces=spaces, sign=' ', key=key))

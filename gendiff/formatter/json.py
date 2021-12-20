@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-from gendiff.differ.differ import STATUS_ADDED, STATUS_REMOVED, STATUS_CHANGED, STATUS_CHILDREN, STATUS_NOT_CHANGED
+from gendiff.differ.differ import TYPE_ADDED, TYPE_REMOVED, TYPE_CHANGED, TYPE_CHILDREN, TYPE_NOT_CHANGED
 
 
 def render_json(diff: List[dict]) -> str:
@@ -16,16 +16,16 @@ def convert_to_object(diff: List[dict]):
             'status': diff_line['status']
         }
 
-        if diff_line['status'] == STATUS_ADDED:
+        if diff_line['status'] == TYPE_ADDED:
             value['value'] = diff_line['value']
-        elif diff_line['status'] == STATUS_REMOVED:
+        elif diff_line['status'] == TYPE_REMOVED:
             value['value'] = diff_line['old_value']
-        elif diff_line['status'] == STATUS_CHANGED:
+        elif diff_line['status'] == TYPE_CHANGED:
             value['old_value'] = diff_line['old_value']
             value['new_value'] = diff_line['value']
-        elif diff_line['status'] == STATUS_NOT_CHANGED:
+        elif diff_line['status'] == TYPE_NOT_CHANGED:
             value['value'] = diff_line['value']
-        elif diff_line['status'] == STATUS_CHILDREN:
+        elif diff_line['status'] == TYPE_CHILDREN:
             value['children'] = convert_to_object(diff_line['children'])
 
         lines.append(value)

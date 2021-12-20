@@ -1,6 +1,6 @@
 from tests.file_loader import read_fixtures_file
 from gendiff.differ.differ import find_diff, FORMAT_JSON, FORMAT_YAML, \
-    STATUS_CHANGED, STATUS_REMOVED
+    TYPE_CHANGED, TYPE_REMOVED
 
 
 def test_json_check_plain():
@@ -10,12 +10,12 @@ def test_json_check_plain():
     diff = find_diff(file1, file2, FORMAT_JSON)
 
     has_timeout = list(filter(lambda x: x['key'] == 'timeout', diff))
-    assert has_timeout[0]['status'] == STATUS_CHANGED
+    assert has_timeout[0]['status'] == TYPE_CHANGED
     assert has_timeout[0]['value'] == 20
     assert has_timeout[0]['old_value'] == 50
 
     has_timeout = list(filter(lambda x: x['key'] == 'follow', diff))
-    assert has_timeout[0]['status'] == STATUS_REMOVED
+    assert has_timeout[0]['status'] == TYPE_REMOVED
     assert not has_timeout[0]['value']
 
 
@@ -26,12 +26,12 @@ def test_yaml_check_plain():
     diff = find_diff(file1, file2, FORMAT_YAML)
 
     has_timeout = list(filter(lambda x: x['key'] == 'timeout', diff))
-    assert has_timeout[0]['status'] == STATUS_CHANGED
+    assert has_timeout[0]['status'] == TYPE_CHANGED
     assert has_timeout[0]['value'] == 20
     assert has_timeout[0]['old_value'] == 50
 
     has_timeout = list(filter(lambda x: x['key'] == 'follow', diff))
-    assert has_timeout[0]['status'] == STATUS_REMOVED
+    assert has_timeout[0]['status'] == TYPE_REMOVED
     assert not has_timeout[0]['value']
 
 
@@ -45,8 +45,8 @@ def test_json_check_not_plain():
     setting2 = list(filter(lambda x: x['key'] == 'setting2', common['children']))[0]
     setting3 = list(filter(lambda x: x['key'] == 'setting3', common['children']))[0]
 
-    assert setting2['status'] == STATUS_REMOVED
+    assert setting2['status'] == TYPE_REMOVED
     assert setting2['old_value'] == 200
 
-    assert setting3['status'] == STATUS_CHANGED
+    assert setting3['status'] == TYPE_CHANGED
     assert setting3['value'] is None

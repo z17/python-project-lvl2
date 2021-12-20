@@ -1,6 +1,6 @@
 from typing import List
 
-from gendiff.differ.differ import STATUS_ADDED, STATUS_REMOVED, STATUS_CHANGED, STATUS_CHILDREN
+from gendiff.differ.differ import TYPE_ADDED, TYPE_REMOVED, TYPE_CHANGED, TYPE_CHILDREN
 
 PLAIN_LINE_TEMPLATE_ADDED = "Property '{key}' was added with value: {value}"
 PLAIN_LINE_TEMPLATE_REMOVED = "Property '{key}' was removed"
@@ -20,17 +20,17 @@ def render_plain_recursive(diff: List[dict], key_prefix='') -> List[str]:
         status = diff_line['status']
         key = f'{key_prefix}{diff_line["key"]}'
 
-        if status == STATUS_ADDED:
+        if status == TYPE_ADDED:
             value = format_value(diff_line['value'])
             lines.append(PLAIN_LINE_TEMPLATE_ADDED.format(key=key, value=value))
-        if status == STATUS_REMOVED:
+        if status == TYPE_REMOVED:
             lines.append(PLAIN_LINE_TEMPLATE_REMOVED.format(key=key))
-        if status == STATUS_CHANGED:
+        if status == TYPE_CHANGED:
             old_value = format_value(diff_line['old_value'])
             new_value = format_value(diff_line['value'])
             lines.append(
                 PLAIN_LINE_TEMPLATE_UPDATED.format(key=key, old_value=old_value, new_value=new_value))
-        if status == STATUS_CHILDREN:
+        if status == TYPE_CHILDREN:
             lines.extend(render_plain_recursive(diff_line['children'], f'{key}.'))
 
     return lines
