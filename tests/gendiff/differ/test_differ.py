@@ -1,13 +1,18 @@
+import json
+
+import yaml
+
 from tests.file_loader import read_fixtures_file
-from gendiff.differ.differ import find_diff, FORMAT_JSON, FORMAT_YAML, \
-    TYPE_CHANGED, TYPE_REMOVED
+from gendiff.differ.differ import find_diff, TYPE_CHANGED, TYPE_REMOVED
 
 
 def test_json_check_plain():
     file1 = read_fixtures_file('file1.json')
     file2 = read_fixtures_file('file2.json')
+    data1 = json.loads(file1)
+    data2 = json.loads(file2)
 
-    diff = find_diff(file1, file2, FORMAT_JSON)
+    diff = find_diff(data1, data2)
 
     has_timeout = list(filter(lambda x: x['key'] == 'timeout', diff))
     assert has_timeout[0]['status'] == TYPE_CHANGED
@@ -22,8 +27,10 @@ def test_json_check_plain():
 def test_yaml_check_plain():
     file1 = read_fixtures_file('yaml_test1_file1.yml')
     file2 = read_fixtures_file('yaml_test1_file2.yml')
+    data1 = yaml.load(file1, Loader=yaml.CLoader)
+    data2 = yaml.load(file2, Loader=yaml.CLoader)
 
-    diff = find_diff(file1, file2, FORMAT_YAML)
+    diff = find_diff(data1, data2)
 
     has_timeout = list(filter(lambda x: x['key'] == 'timeout', diff))
     assert has_timeout[0]['status'] == TYPE_CHANGED
@@ -38,8 +45,10 @@ def test_yaml_check_plain():
 def test_json_check_not_plain():
     file1 = read_fixtures_file('not_plain_test1_example1.json')
     file2 = read_fixtures_file('not_plain_test1_example2.json')
+    data1 = json.loads(file1)
+    data2 = json.loads(file2)
 
-    diff = find_diff(file1, file2, FORMAT_JSON)
+    diff = find_diff(data1, data2)
 
     common = list(filter(lambda x: x['key'] == 'common', diff))[0]
     setting2 = list(filter(lambda x: x['key'] == 'setting2', common['children']))[0]
