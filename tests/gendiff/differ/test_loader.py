@@ -1,9 +1,9 @@
-from gendiff.differ.loader import clear_extension
+from gendiff.differ.loader import standardize_extension
 
 
-def test_clear_extension():
-    cleared1 = clear_extension('.json')
+def test_standardize_extension():
+    cleared1 = standardize_extension('.json')
     assert cleared1 == 'json'
 
-    cleared2 = clear_extension('YML')
+    cleared2 = standardize_extension('YML')
     assert cleared2 == 'yml'
