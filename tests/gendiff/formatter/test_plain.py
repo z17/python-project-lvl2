@@ -1,7 +1,7 @@
 from gendiff.differ.differ import STATUS_ADDED, STATUS_REMOVED, STATUS_CHANGED, STATUS_CHILDREN, STATUS_NOT_CHANGED, \
     difference_data
 from gendiff.formatter.plain import render_plain
-from tests.functions import load_file
+from tests.file_loader import read_fixtures_file
 
 
 def test_render_plain():
@@ -19,6 +19,6 @@ def test_render_plain():
 
     output = render_plain(diff)
 
-    expected = load_file('tests/fixtures/render_plain_result1.txt')
+    expected = read_fixtures_file('render_plain_result1.txt')
 
     assert output == expected
