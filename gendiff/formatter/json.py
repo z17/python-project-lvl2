@@ -13,19 +13,19 @@ def convert_to_object(diff: List[dict]):
     for diff_line in diff:
         value = {
             'key': diff_line['key'],
-            'status': diff_line['status']
+            'type': diff_line['type']
         }
 
-        if diff_line['status'] == TYPE_ADDED:
+        if diff_line['type'] == TYPE_ADDED:
             value['value'] = diff_line['value']
-        elif diff_line['status'] == TYPE_REMOVED:
+        elif diff_line['type'] == TYPE_REMOVED:
             value['value'] = diff_line['old_value']
-        elif diff_line['status'] == TYPE_CHANGED:
+        elif diff_line['type'] == TYPE_CHANGED:
             value['old_value'] = diff_line['old_value']
             value['new_value'] = diff_line['value']
-        elif diff_line['status'] == TYPE_NOT_CHANGED:
+        elif diff_line['type'] == TYPE_NOT_CHANGED:
             value['value'] = diff_line['value']
-        elif diff_line['status'] == TYPE_CHILDREN:
+        elif diff_line['type'] == TYPE_CHILDREN:
             value['children'] = convert_to_object(diff_line['children'])
 
         lines.append(value)

@@ -27,14 +27,14 @@ def test_render_plain():
     dict_diff = list(filter(lambda x: x['key'] == 'dict_key', parsed_output))[0]
 
     assert key1_diff['key'] == 'key1'
-    assert key1_diff['status'] == 'ADDED'
+    assert key1_diff['type'] == 'ADDED'
 
     assert key2_diff['key'] == 'key2'
-    assert key2_diff['status'] == 'REMOVED'
+    assert key2_diff['type'] == 'REMOVED'
     assert not key2_diff['value']
 
     assert key4_diff['key'] == 'key4'
-    assert key4_diff['status'] == 'CHANGED'
+    assert key4_diff['type'] == 'CHANGED'
     assert key4_diff['new_value'] == 'str'
 
     assert dict_diff['children'][0]['key'] == 'key'

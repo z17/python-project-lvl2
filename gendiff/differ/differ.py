@@ -34,10 +34,10 @@ def find_diff(data1, data2) -> List[dict]:
     return diff
 
 
-def difference_data(key: str, status: str, value=None, old_value=None, children: Optional[List] = None) -> dict:
+def difference_data(key: str, diff_type: str, value=None, old_value=None, children: Optional[List] = None) -> dict:
     return {
         'key': key,
-        'status': status,
+        'type': diff_type,
         'old_value': old_value,
         'value': value,
         'children': children

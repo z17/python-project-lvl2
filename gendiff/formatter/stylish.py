@@ -3,11 +3,11 @@ from typing import List
 from gendiff.differ.differ import TYPE_CHANGED, TYPE_ADDED, \
     TYPE_NOT_CHANGED, TYPE_REMOVED, TYPE_CHILDREN
 
-TEMPLATE_VALUE = '{spaces}{status} {key}: {value}'
+TEMPLATE_VALUE = '{spaces}{sign} {key}: {value}'
 TEMPLATE_DICT_OPEN = '{spaces}{sign} {key}: {{'
 TEMPLATE_DICT_CLOSE = '  {spaces}}}'
 
-STATUS_MAP = {
+TYPE_MAP = {
     TYPE_ADDED: '+',
     TYPE_REMOVED: '-',
     TYPE_NOT_CHANGED: ' ',
@@ -15,10 +15,7 @@ STATUS_MAP = {
 
 
 def render_stylish(diff: List[dict]):
-    lines = ['{']
-    lines.extend(stylish_recursive(diff))
-    lines.append('}')
-    return "\n".join(lines)
+    return "\n".join(get_stylish_lines(diff))
 
 
 def format_value(key, value, sign, level):
@@ -39,7 +36,7 @@ def format_value(key, value, sign, level):
         else:
             val_string = str(value)
 
-        return TEMPLATE_VALUE.format(spaces=spaces, status=sign,
+        return TEMPLATE_VALUE.format(spaces=spaces, sign=sign,
                                      key=key,
                                      value=val_string)
 
@@ -48,38 +45,44 @@ def get_spaces(level):
     return ' ' * (4 * level - 2)
 
 
-def stylish_recursive(diff: List[dict], level=1):
+def get_stylish_lines(diff: List[dict], level=1):
     diff_lines = []
+    if level == 1:
+        diff_lines.append('{')
+
     diff.sort(key=lambda a: a['key'])
     for diff_line in diff:
-        status = diff_line['status']
+        line_type = diff_line['type']
         key = diff_line['key']
-        if status == TYPE_ADDED:
+        if line_type == TYPE_ADDED:
             diff_lines.append(
                 format_value(key, diff_line['value'], '+', level)
             )
-        elif status == TYPE_REMOVED:
+        elif line_type == TYPE_REMOVED:
             diff_lines.append(
                 format_value(key, diff_line['old_value'], '-', level)
             )
-        elif status == TYPE_CHANGED:
+        elif line_type == TYPE_CHANGED:
             diff_lines.append(
                 format_value(key, diff_line['old_value'], '-', level)
             )
             diff_lines.append(
                 format_value(key, diff_line['value'], '+', level)
             )
-        elif status == TYPE_NOT_CHANGED:
+        elif line_type == TYPE_NOT_CHANGED:
             diff_lines.append(
                 format_value(key, diff_line['value'], ' ', level)
             )
-        elif status == TYPE_CHILDREN:
+        elif line_type == TYPE_CHILDREN:
             spaces = get_spaces(level)
             diff_lines.append(
                 TEMPLATE_DICT_OPEN.format(spaces=spaces, sign=' ', key=key))
             diff_lines.extend(
-                stylish_recursive(diff_line['children'], level + 1)
+                get_stylish_lines(diff_line['children'], level + 1)
             )
             diff_lines.append(TEMPLATE_DICT_CLOSE.format(spaces=spaces))
+
+    if level == 1:
+        diff_lines.append('}')
 
     return diff_lines

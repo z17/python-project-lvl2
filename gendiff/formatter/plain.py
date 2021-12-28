@@ -17,20 +17,20 @@ def render_plain_recursive(diff: List[dict], key_prefix='') -> List[str]:
     diff.sort(key=lambda a: a['key'])
 
     for diff_line in diff:
-        status = diff_line['status']
+        line_type = diff_line['type']
         key = f'{key_prefix}{diff_line["key"]}'
 
-        if status == TYPE_ADDED:
+        if line_type == TYPE_ADDED:
             value = format_value(diff_line['value'])
             lines.append(PLAIN_LINE_TEMPLATE_ADDED.format(key=key, value=value))
-        if status == TYPE_REMOVED:
+        if line_type == TYPE_REMOVED:
             lines.append(PLAIN_LINE_TEMPLATE_REMOVED.format(key=key))
-        if status == TYPE_CHANGED:
+        if line_type == TYPE_CHANGED:
             old_value = format_value(diff_line['old_value'])
             new_value = format_value(diff_line['value'])
             lines.append(
                 PLAIN_LINE_TEMPLATE_UPDATED.format(key=key, old_value=old_value, new_value=new_value))
-        if status == TYPE_CHILDREN:
+        if line_type == TYPE_CHILDREN:
             lines.extend(render_plain_recursive(diff_line['children'], f'{key}.'))
 
     return lines

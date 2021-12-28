@@ -11,7 +11,8 @@ def generate_diff(file_path1, file_path2, style=render.STYLE_STYLISH):
     if extension1 != extension2:
         raise Exception("Invalid file formats")
 
-    data1, data2 = parser.parse(text1, text2, extension1)
+    data1 = parser.parse(text1, extension1)
+    data2 = parser.parse(text2, extension2)
 
     diff = differ.find_diff(data1, data2)
 
